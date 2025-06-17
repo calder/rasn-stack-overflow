@@ -12,7 +12,7 @@ pub mod main {
     use rasn::prelude::*;
     #[doc = " Inner type "]
     #[derive(AsnType, Debug, Clone, Decode, Encode, PartialEq, Eq, Hash)]
-    #[rasn(choice, tag(explicit(context, 123)))]
+    #[rasn(choice)]
     pub enum FizzBuzz {
         #[rasn(tag(context, 456))]
         foo(()),

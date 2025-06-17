@@ -17,7 +17,7 @@ mod generated {
         use lazy_static::lazy_static;
         use rasn::prelude::*;
         /// Inner type
-        #[rasn(choice, tag(explicit(context, 123)))]
+        #[rasn(choice)]
         pub enum FizzBuzz {
             #[rasn(tag(context, 456))]
             foo(()),
@@ -25,9 +25,7 @@ mod generated {
             bar(()),
         }
         impl rasn::AsnType for FizzBuzz {
-            const TAG: rasn::types::Tag = {
-                rasn::types::Tag::new(rasn::types::Class::Context, 123)
-            };
+            const TAG: rasn::types::Tag = { rasn::types::Tag::EOC };
             const TAG_TREE: rasn::types::TagTree = const {
                 let list: &'static [rasn::types::TagTree] = const {
                     &[
@@ -68,7 +66,7 @@ mod generated {
                         );
                     }
                 }
-                rasn::types::TagTree::Leaf(Self::TAG)
+                tag_tree
             };
             const IDENTIFIER: rasn::types::Identifier = rasn::types::Identifier(
                 Some("FizzBuzz"),
@@ -179,150 +177,7 @@ mod generated {
             fn decode<D: rasn::Decoder>(
                 decoder: &mut D,
             ) -> core::result::Result<Self, D::Error> {
-                #[rasn(choice)]
-                enum InnerFizzBuzz {
-                    #[rasn(tag(context, 456))]
-                    foo(()),
-                    #[rasn(tag(context, 789))]
-                    bar(()),
-                }
-                impl rasn::AsnType for InnerFizzBuzz {
-                    const TAG: rasn::types::Tag = { rasn::types::Tag::EOC };
-                    const TAG_TREE: rasn::types::TagTree = const {
-                        let list: &'static [rasn::types::TagTree] = const {
-                            &[
-                                {
-                                    let variant_list: &'static [rasn::types::TagTree] = const {
-                                        &[
-                                            rasn::types::TagTree::Leaf(
-                                                rasn::types::Tag::new(rasn::types::Class::Context, 456),
-                                            ),
-                                            rasn::types::TagTree::Leaf(
-                                                rasn::types::Tag::new(rasn::types::Class::Context, 789),
-                                            ),
-                                        ]
-                                    };
-                                    let variant_tag_tree: rasn::types::TagTree = rasn::types::TagTree::Choice(
-                                        variant_list,
-                                    );
-                                    if !variant_tag_tree.is_unique() {
-                                        {
-                                            ::core::panicking::panic_fmt(
-                                                format_args!(
-                                                    "InnerFizzBuzz\'s variants is not unique, ensure that your variants\' tags are correct.",
-                                                ),
-                                            );
-                                        }
-                                    }
-                                    variant_tag_tree
-                                },
-                            ]
-                        };
-                        let tag_tree: rasn::types::TagTree = rasn::types::TagTree::Choice(
-                            list,
-                        );
-                        if !tag_tree.is_unique() {
-                            {
-                                ::core::panicking::panic_fmt(
-                                    format_args!(
-                                        "InnerFizzBuzz\'s variants is not unique, ensure that your variants\' tags are correct.",
-                                    ),
-                                );
-                            }
-                        }
-                        tag_tree
-                    };
-                    const IDENTIFIER: rasn::types::Identifier = rasn::types::Identifier(
-                        Some("InnerFizzBuzz"),
-                    );
-                }
-                impl rasn::types::Choice for InnerFizzBuzz {
-                    const VARIANTS: &'static [rasn::types::TagTree] = &[
-                        rasn::types::TagTree::Leaf(
-                            rasn::types::Tag::new(rasn::types::Class::Context, 456),
-                        ),
-                        rasn::types::TagTree::Leaf(
-                            rasn::types::Tag::new(rasn::types::Class::Context, 789),
-                        ),
-                    ];
-                    const VARIANCE_CONSTRAINT: rasn::types::Constraints = rasn::types::Constraints::new(
-                        &[
-                            rasn::types::Constraint::Value(
-                                rasn::types::constraints::Extensible::new(
-                                        rasn::types::constraints::Value::new(
-                                            rasn::types::constraints::Bounded::const_new(
-                                                0i128 as i128,
-                                                1i128 as i128,
-                                            ),
-                                        ),
-                                    )
-                                    .set_extensible(false),
-                            ),
-                        ],
-                    );
-                    const EXTENDED_VARIANTS: Option<&'static [rasn::types::TagTree]> = None;
-                    const IDENTIFIERS: &'static [&'static str] = &["foo", "bar"];
-                }
-                #[automatically_derived]
-                impl rasn::types::DecodeChoice for InnerFizzBuzz {
-                    fn from_tag<D: rasn::Decoder>(
-                        decoder: &mut D,
-                        tag: rasn::types::Tag,
-                    ) -> core::result::Result<Self, D::Error> {
-                        use rasn::de::Decode;
-                        if rasn::types::TagTree::tag_contains(
-                            &tag,
-                            &[
-                                rasn::types::TagTree::Leaf(
-                                    rasn::types::Tag::new(rasn::types::Class::Context, 456),
-                                ),
-                            ],
-                        ) {
-                            return <_>::decode_with_tag(decoder, tag).map(Self::foo);
-                        }
-                        if rasn::types::TagTree::tag_contains(
-                            &tag,
-                            &[
-                                rasn::types::TagTree::Leaf(
-                                    rasn::types::Tag::new(rasn::types::Class::Context, 789),
-                                ),
-                            ],
-                        ) {
-                            return <_>::decode_with_tag(decoder, tag).map(Self::bar);
-                        }
-                        Err(
-                            rasn::de::Error::no_valid_choice(
-                                "InnerFizzBuzz",
-                                decoder.codec(),
-                            ),
-                        )
-                    }
-                }
-                #[automatically_derived]
-                impl rasn::Decode for InnerFizzBuzz {
-                    fn decode_with_tag_and_constraints<D: rasn::Decoder>(
-                        decoder: &mut D,
-                        tag: rasn::types::Tag,
-                        constraints: rasn::types::Constraints,
-                    ) -> core::result::Result<Self, D::Error> {
-                        decoder.decode_explicit_prefix(tag)
-                    }
-                    fn decode<D: rasn::Decoder>(
-                        decoder: &mut D,
-                    ) -> core::result::Result<Self, D::Error> {
-                        decoder.decode_choice(Self::CONSTRAINTS)
-                    }
-                }
-                let value = decoder
-                    .decode_explicit_prefix::<
-                        InnerFizzBuzz,
-                    >(<Self as rasn::AsnType>::TAG)?;
-                Ok(
-                    match value {
-                        InnerFizzBuzz::foo(i0) => FizzBuzz::foo(i0),
-                        InnerFizzBuzz::bar(i0) => FizzBuzz::bar(i0),
-                    },
-                )
+                decoder.decode_choice(Self::CONSTRAINTS)
             }
         }
         #[automatically_derived]
@@ -331,211 +186,46 @@ mod generated {
                 &self,
                 encoder: &mut E,
             ) -> core::result::Result<(), E::Error> {
-                #[rasn(choice)]
-                enum InnerFizzBuzz<'inner> {
-                    #[rasn(tag(context, 456))]
-                    foo(&'inner ()),
-                    #[rasn(tag(context, 789))]
-                    bar(&'inner ()),
-                }
-                impl<'inner> rasn::AsnType for InnerFizzBuzz<'inner> {
-                    const TAG: rasn::types::Tag = { rasn::types::Tag::EOC };
-                    const TAG_TREE: rasn::types::TagTree = const {
-                        let list: &'static [rasn::types::TagTree] = const {
-                            &[
-                                {
-                                    let variant_list: &'static [rasn::types::TagTree] = const {
-                                        &[
-                                            rasn::types::TagTree::Leaf(
-                                                rasn::types::Tag::new(rasn::types::Class::Context, 456),
-                                            ),
-                                            rasn::types::TagTree::Leaf(
-                                                rasn::types::Tag::new(rasn::types::Class::Context, 789),
-                                            ),
-                                        ]
-                                    };
-                                    let variant_tag_tree: rasn::types::TagTree = rasn::types::TagTree::Choice(
-                                        variant_list,
-                                    );
-                                    if !variant_tag_tree.is_unique() {
-                                        {
-                                            ::core::panicking::panic_fmt(
-                                                format_args!(
-                                                    "InnerFizzBuzz\'s variants is not unique, ensure that your variants\' tags are correct.",
-                                                ),
-                                            );
-                                        }
-                                    }
-                                    variant_tag_tree
-                                },
-                            ]
-                        };
-                        let tag_tree: rasn::types::TagTree = rasn::types::TagTree::Choice(
-                            list,
-                        );
-                        if !tag_tree.is_unique() {
-                            {
-                                ::core::panicking::panic_fmt(
-                                    format_args!(
-                                        "InnerFizzBuzz\'s variants is not unique, ensure that your variants\' tags are correct.",
-                                    ),
-                                );
-                            }
-                        }
-                        tag_tree
-                    };
-                    const IDENTIFIER: rasn::types::Identifier = rasn::types::Identifier(
-                        Some("InnerFizzBuzz"),
-                    );
-                }
-                impl<'inner> rasn::types::Choice for InnerFizzBuzz<'inner> {
-                    const VARIANTS: &'static [rasn::types::TagTree] = &[
-                        rasn::types::TagTree::Leaf(
-                            rasn::types::Tag::new(rasn::types::Class::Context, 456),
-                        ),
-                        rasn::types::TagTree::Leaf(
-                            rasn::types::Tag::new(rasn::types::Class::Context, 789),
-                        ),
-                    ];
-                    const VARIANCE_CONSTRAINT: rasn::types::Constraints = rasn::types::Constraints::new(
-                        &[
-                            rasn::types::Constraint::Value(
-                                rasn::types::constraints::Extensible::new(
-                                        rasn::types::constraints::Value::new(
-                                            rasn::types::constraints::Bounded::const_new(
-                                                0i128 as i128,
-                                                1i128 as i128,
-                                            ),
-                                        ),
-                                    )
-                                    .set_extensible(false),
-                            ),
-                        ],
-                    );
-                    const EXTENDED_VARIANTS: Option<&'static [rasn::types::TagTree]> = None;
-                    const IDENTIFIERS: &'static [&'static str] = &["foo", "bar"];
-                }
-                #[automatically_derived]
-                impl<'inner> rasn::Encode for InnerFizzBuzz<'inner> {
-                    fn encode<'encoder, E: rasn::Encoder<'encoder>>(
-                        &self,
-                        encoder: &mut E,
-                    ) -> core::result::Result<(), E::Error> {
-                        encoder
-                            .encode_choice::<
-                                Self,
-                            >(
-                                Self::CONSTRAINTS,
-                                match self {
-                                    InnerFizzBuzz::foo(_) => {
-                                        rasn::types::Tag::new(rasn::types::Class::Context, 456)
-                                    }
-                                    InnerFizzBuzz::bar(_) => {
-                                        rasn::types::Tag::new(rasn::types::Class::Context, 789)
-                                    }
-                                },
-                                |encoder| match self {
-                                    InnerFizzBuzz::foo(value) => {
-                                        rasn::Encode::encode_with_tag_and_identifier(
-                                                value,
-                                                encoder,
-                                                rasn::types::Tag::new(rasn::types::Class::Context, 456),
-                                                rasn::types::Identifier(Some("foo")),
-                                            )
-                                            .map(|_| rasn::types::Tag::new(
-                                                rasn::types::Class::Context,
-                                                456,
-                                            ))
-                                    }
-                                    InnerFizzBuzz::bar(value) => {
-                                        rasn::Encode::encode_with_tag_and_identifier(
-                                                value,
-                                                encoder,
-                                                rasn::types::Tag::new(rasn::types::Class::Context, 789),
-                                                rasn::types::Identifier(Some("bar")),
-                                            )
-                                            .map(|_| rasn::types::Tag::new(
-                                                rasn::types::Class::Context,
-                                                789,
-                                            ))
-                                    }
-                                },
-                                Self::IDENTIFIER,
-                            )
-                            .map(drop)
-                    }
-                    fn encode_with_identifier<'encoder, E: rasn::Encoder<'encoder>>(
-                        &self,
-                        encoder: &mut E,
-                        identifier: rasn::types::Identifier,
-                    ) -> core::result::Result<(), E::Error> {
-                        encoder
-                            .encode_choice::<
-                                Self,
-                            >(
-                                Self::CONSTRAINTS,
-                                match self {
-                                    InnerFizzBuzz::foo(_) => {
-                                        rasn::types::Tag::new(rasn::types::Class::Context, 456)
-                                    }
-                                    InnerFizzBuzz::bar(_) => {
-                                        rasn::types::Tag::new(rasn::types::Class::Context, 789)
-                                    }
-                                },
-                                |encoder| match self {
-                                    InnerFizzBuzz::foo(value) => {
-                                        rasn::Encode::encode_with_tag_and_identifier(
-                                                value,
-                                                encoder,
-                                                rasn::types::Tag::new(rasn::types::Class::Context, 456),
-                                                rasn::types::Identifier(Some("foo")),
-                                            )
-                                            .map(|_| rasn::types::Tag::new(
-                                                rasn::types::Class::Context,
-                                                456,
-                                            ))
-                                    }
-                                    InnerFizzBuzz::bar(value) => {
-                                        rasn::Encode::encode_with_tag_and_identifier(
-                                                value,
-                                                encoder,
-                                                rasn::types::Tag::new(rasn::types::Class::Context, 789),
-                                                rasn::types::Identifier(Some("bar")),
-                                            )
-                                            .map(|_| rasn::types::Tag::new(
-                                                rasn::types::Class::Context,
-                                                789,
-                                            ))
-                                    }
-                                },
-                                identifier,
-                            )
-                            .map(drop)
-                    }
-                    fn encode_with_tag_and_constraints<
-                        'encoder,
-                        EN: rasn::Encoder<'encoder>,
-                    >(
-                        &self,
-                        encoder: &mut EN,
-                        tag: rasn::types::Tag,
-                        constraints: rasn::types::Constraints,
-                        identifier: rasn::types::Identifier,
-                    ) -> core::result::Result<(), EN::Error> {
-                        encoder.encode_explicit_prefix(tag, self, identifier).map(drop)
-                    }
-                }
-                let value = match &self {
-                    Self::foo { 0: ref i0 } => InnerFizzBuzz::foo { 0: i0 },
-                    Self::bar { 0: ref i0 } => InnerFizzBuzz::bar { 0: i0 },
-                };
                 encoder
-                    .encode_explicit_prefix::<
-                        InnerFizzBuzz,
+                    .encode_choice::<
+                        Self,
                     >(
-                        <FizzBuzz as rasn::AsnType>::TAG,
-                        &value,
-                        rasn::types::Identifier(Some("FizzBuzz")),
+                        Self::CONSTRAINTS,
+                        match self {
+                            FizzBuzz::foo(_) => {
+                                rasn::types::Tag::new(rasn::types::Class::Context, 456)
+                            }
+                            FizzBuzz::bar(_) => {
+                                rasn::types::Tag::new(rasn::types::Class::Context, 789)
+                            }
+                        },
+                        |encoder| match self {
+                            FizzBuzz::foo(value) => {
+                                rasn::Encode::encode_with_tag_and_identifier(
+                                        value,
+                                        encoder,
+                                        rasn::types::Tag::new(rasn::types::Class::Context, 456),
+                                        rasn::types::Identifier(Some("foo")),
+                                    )
+                                    .map(|_| rasn::types::Tag::new(
+                                        rasn::types::Class::Context,
+                                        456,
+                                    ))
+                            }
+                            FizzBuzz::bar(value) => {
+                                rasn::Encode::encode_with_tag_and_identifier(
+                                        value,
+                                        encoder,
+                                        rasn::types::Tag::new(rasn::types::Class::Context, 789),
+                                        rasn::types::Identifier(Some("bar")),
+                                    )
+                                    .map(|_| rasn::types::Tag::new(
+                                        rasn::types::Class::Context,
+                                        789,
+                                    ))
+                            }
+                        },
+                        Self::IDENTIFIER,
                     )
                     .map(drop)
             }
