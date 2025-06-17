@@ -1,0 +1,13 @@
+[package]
+name = "rasn-stack-overflow"
+version = "0.1.0"
+edition = "2024"
+publish = ["artifactory"]
+
+[dependencies]
+backtrace-on-stack-overflow = { version = "*" }
+lazy_static = { version = "*" }
+rasn = { version = "*" }
+
+[build-dependencies]
+rasn-compiler = { version = "*" }

@@ -1,0 +1,10 @@
+Main DEFINITIONS AUTOMATIC TAGS ::= BEGIN
+
+Fizz ::= SEQUENCE {
+  buzz [123] EXPLICIT CHOICE {
+     foo [456] NULL,
+     bar [789] NULL,
+  },
+}
+
+END
